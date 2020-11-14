@@ -1,6 +1,9 @@
 <div class="card-header d-flex justify-content-between">
   <div>
-    <h5 class='m-0'><b><%= @todo_list.title %></b></h5>
+    <h5 class='m-0'>
+      <b><%= @todo_list.title %></b>
+      <span class="badge badge-<%= @todo_list.budge_color %>"><%= @todo_list.status %></span>
+    </h5>
     <p class='text-secondary m-0'><small> <%= @todo_list.percent_complete %>% Complete (<%= @todo_list.completed_items %>/<%= @todo_list.total_items %> Todo Items)</small></p>
   </div>
   <div>
@@ -12,6 +15,16 @@
   <div class="progress mb-4">
     <div class="progress-bar bg-info" role="progressbar" style="width: <%= @todo_list.percent_complete %>%" aria-valuenow="<%= @todo_list.percent_complete %>" aria-valuemin="0" aria-valuemax="100"></div>
   </div>  
+  
+  <%= form_for([@todo_list, @todo_item]) do |f| %>
+    <div class="input-group mb-4">
+      <%= f.text_field :description, class: "form-control", placeholder: 'Add a todo item' %>
+          <div class="input-group-append">
+            <%= f.submit "Add", class: "btn btn-primary input-group-btn" %>
+          </div>
+    </div>
+  <% end %>
+  
   <ul class='list-group'>
     <% @todo_list.todo_items.each do |todo_item| %>
       <% if todo_item.completed? %>
@@ -20,7 +33,7 @@
             <sapn class='text-muted'>
               <em><%= todo_item.description %></em>
             </sapn>
-            <%= link_to '#',class: 'btn btn-dark' do %>
+            <%= link_to '#',class: 'btn btn-dark', data: { reflex: 'click->TodoItem#mark_incomplete', id: todo_item.id } do %>
               <i class='fas fa-times'></i>
             <% end %>
           </div>
@@ -31,7 +44,7 @@
             <sapn>
               <%= todo_item.description %>
             </sapn>
-            <%= link_to '#',class: 'btn btn-info' do %>
+            <%= link_to '#',class: 'btn btn-info', data: { reflex: 'click->TodoItem#mark_complete', id: todo_item.id } do %>
               <i class='fas fa-check'></i>
             <% end %>
           </div>
