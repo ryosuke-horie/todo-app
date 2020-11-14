@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  root 'application#hello'
+  resources :todo_lists do
+    resources :todo_items
+  end
 end
